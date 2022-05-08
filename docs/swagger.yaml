@@ -1,0 +1,547 @@
+definitions:
+  common.Response:
+    properties:
+      code:
+        type: integer
+      data: {}
+      msg:
+        type: string
+    type: object
+  model.AuthUser:
+    properties:
+      name:
+        type: string
+      password:
+        type: string
+      setCookie:
+        type: boolean
+    type: object
+  model.Container:
+    properties:
+      address:
+        type: string
+      cmd:
+        items:
+          type: string
+        type: array
+      id:
+        type: string
+      image:
+        type: string
+      name:
+        type: string
+      port:
+        type: integer
+      startAt:
+        type: string
+      status:
+        type: string
+    type: object
+  model.CreatedContainer:
+    properties:
+      cmd:
+        items:
+          type: string
+        type: array
+      image:
+        type: string
+      name:
+        type: string
+      port:
+        type: integer
+    type: object
+  model.CreatedUser:
+    properties:
+      email:
+        type: string
+      name:
+        type: string
+      password:
+        type: string
+    type: object
+  model.JWTToken:
+    properties:
+      describe:
+        type: string
+      token:
+        type: string
+    type: object
+  model.UpdatedUser:
+    properties:
+      email:
+        type: string
+      name:
+        type: string
+      password:
+        type: string
+    type: object
+  model.User:
+    properties:
+      create_time:
+        type: string
+      email:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      update_time:
+        type: string
+    type: object
+host: 127.0.0.1:8080
+info:
+  contact: {}
+  description: 相关接口文档
+  title: gin示例 API
+  version: 0.0.1
+paths:
+  /:
+    get:
+      produces:
+      - text/html
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      summary: Index
+      tags:
+      - index
+  /api/auth/token:
+    delete:
+      description: User logout
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/common.Response'
+      summary: Logout
+      tags:
+      - auth
+    post:
+      consumes:
+      - application/json
+      description: User login
+      parameters:
+      - description: auth user info
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/model.AuthUser'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/model.JWTToken'
+              type: object
+      summary: Login
+      tags:
+      - auth
+  /api/auth/user:
+    post:
+      consumes:
+      - application/json
+      description: Create user and storage
+      parameters:
+      - description: user info
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/model.CreatedUser'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/model.User'
+              type: object
+      summary: Register user
+      tags:
+      - auth
+  /api/v1/containers:
+    get:
+      description: List container
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.Response'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/model.Container'
+                  type: array
+              type: object
+      security:
+      - JWT: []
+      summary: List container
+      tags:
+      - container
+    post:
+      consumes:
+      - application/json
+      description: Create container
+      parameters:
+      - description: container info
+        in: body
+        name: container
+        required: true
+        schema:
+          $ref: '#/definitions/model.CreatedContainer'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/model.Container'
+              type: object
+      security:
+      - JWT: []
+      summary: Create container
+      tags:
+      - container
+  /api/v1/containers/:id:
+    put:
+      consumes:
+      - application/json
+      description: Update container
+      parameters:
+      - description: container info
+        in: body
+        name: container
+        required: true
+        schema:
+          $ref: '#/definitions/model.CreatedContainer'
+      - description: container id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/model.Container'
+              type: object
+      security:
+      - JWT: []
+      summary: Update container
+      tags:
+      - container
+  /api/v1/containers/{id}:
+    delete:
+      description: Delete container
+      parameters:
+      - description: container id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/common.Response'
+      security:
+      - JWT: []
+      summary: Delete container
+      tags:
+      - container
+    get:
+      description: Get container
+      parameters:
+      - description: container id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/model.Container'
+              type: object
+      security:
+      - JWT: []
+      summary: Get container
+      tags:
+      - container
+    post:
+      description: Operate container
+      parameters:
+      - description: container id
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: 'verb: start/stop/restart'
+        in: query
+        name: verb
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/common.Response'
+      security:
+      - JWT: []
+      summary: Operate container
+      tags:
+      - container
+  /api/v1/containers/{id}/exec:
+    get:
+      description: exec container
+      parameters:
+      - description: container id
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: shell, sh or bash
+        in: query
+        name: shell
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      security:
+      - JWT: []
+      summary: Exec container
+      tags:
+      - container
+  /api/v1/containers/{id}/log:
+    get:
+      description: Get container log
+      parameters:
+      - description: container id
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: follow log
+        in: query
+        name: follow
+        type: boolean
+      - description: tail log all or number
+        in: query
+        name: tail
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      security:
+      - JWT: []
+      summary: Get container log
+      tags:
+      - container
+  /api/v1/containers/{id}/proxy:
+    get:
+      description: proxy container
+      parameters:
+      - description: container id
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: shell, sh or bash
+        in: query
+        name: shell
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      security:
+      - JWT: []
+      summary: Proxy container
+      tags:
+      - container
+  /api/v1/users:
+    get:
+      description: List user and storage
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.Response'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/model.User'
+                  type: array
+              type: object
+      security:
+      - JWT: []
+      summary: List user
+      tags:
+      - user
+    post:
+      consumes:
+      - application/json
+      description: Create user and storage
+      parameters:
+      - description: user info
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/model.CreatedUser'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/model.User'
+              type: object
+      security:
+      - JWT: []
+      summary: Create user
+      tags:
+      - user
+  /api/v1/users/{id}:
+    delete:
+      description: Delete user and storage
+      parameters:
+      - description: user id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/common.Response'
+      security:
+      - JWT: []
+      summary: Delete user
+      tags:
+      - user
+    get:
+      description: Get user and storage
+      parameters:
+      - description: user id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/model.User'
+              type: object
+      security:
+      - JWT: []
+      summary: Get user
+      tags:
+      - user
+    put:
+      consumes:
+      - application/json
+      description: Update user and storage
+      parameters:
+      - description: user info
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/model.UpdatedUser'
+      - description: user id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/model.User'
+              type: object
+      security:
+      - JWT: []
+      summary: Update user
+      tags:
+      - user
+  /healthz:
+    get:
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ok
+          schema:
+            type: string
+      summary: Healthz
+      tags:
+      - healthz
+swagger: "2.0"
