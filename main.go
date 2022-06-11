@@ -25,6 +25,9 @@ func init(){
 	ConfigRead(*configFile)
 
 	LogInit()
+
+	// 连接数据库
+	InitDatabase()
 }
 
 //@title gin示例 API

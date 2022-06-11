@@ -21,7 +21,7 @@ type ConfigMap struct {
 	MysqlUser					string		`json:"MysqlUser" yaml:"mysql_user"`
 	MysqlPwd		    		string		`json:"MysqlPwd" yaml:"mysql_pwd"`
 	MysqlHost		    		string		`json:"MysqlHost" yaml:"mysql_host"`
-	MysqlPort		    		int		    `json:"MysqlPort,string" yaml:"mysql_port"`
+	MysqlPort		    		string		    `json:"MysqlPort,string" yaml:"mysql_port"`
 	MysqlDb		        		string		`json:"MysqlDb" yaml:"mysql_db"`
 
 }

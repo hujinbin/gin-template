@@ -8,6 +8,7 @@ require (
 	github.com/gin-gonic/gin v1.6.3
 	github.com/go-openapi/spec v0.20.6 // indirect
 	github.com/go-openapi/swag v0.21.1 // indirect
+	github.com/go-sql-driver/mysql v1.6.0 // indirect
 	github.com/jinzhu/configor v1.2.1
 	github.com/jtolds/gls v4.20.0+incompatible
 	github.com/lestrrat-go/file-rotatelogs v2.4.0+incompatible
